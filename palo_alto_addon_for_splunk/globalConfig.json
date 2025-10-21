@@ -1,0 +1,532 @@
+{
+    "pages": {
+        "configuration": {
+            "tabs": [
+                {
+                    "name": "account",
+                    "table": {
+                        "actions": [
+                            "edit",
+                            "delete",
+                            "clone"
+                        ],
+                        "header": [
+                            {
+                                "label": "Name",
+                                "field": "name"
+                            },
+                            {
+                                "label": "Type",
+                                "field": "account_type"
+                            }
+                        ]
+                    },
+                    "entity": [
+                        {
+                            "type": "text",
+                            "label": "Name",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Account Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 1 and 100",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                }
+                            ],
+                            "field": "name",
+                            "help": "A unique name for the account.",
+                            "required": true
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Account Type",
+                            "field": "account_type",
+                            "required": true,
+                            "defaultValue": "firewall_panorama",
+                            "help": "Type of Palo Alto account",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "firewall_panorama",
+                                        "label": "Firewall & Panorama Accounts"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "label": "API key",
+                            "field": "api_key",
+                            "help": "API key",
+                            "required": true,
+                            "encrypted": true
+                        }
+                    ],
+                    "title": "Accounts"
+                },
+                {
+                    "name": "api_endpoints",
+                    "table": {
+                        "actions": [
+                            "edit",
+                            "delete",
+                            "clone"
+                        ],
+                        "header": [
+                            {
+                                "label": "Name",
+                                "field": "name"
+                            },
+                            {
+                                "label": "Description",
+                                "field": "description"
+                            },
+                            {
+                                "label": "API URL",
+                                "field": "api_url"
+                            },
+                            {
+                                "label": "Script source",
+                                "field": "script_type"
+                            }
+                        ]
+                    },
+                    "entity": [
+                        {
+                            "type": "text",
+                            "label": "Name",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Endpoint Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of input name should be between 1 and 100",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                }
+                            ],
+                            "field": "name",
+                            "help": "A name for the api endpoint.",
+                            "required": true
+                        },
+                        {
+                            "type": "text",
+                            "label": "Description",
+                            "field": "description",
+                            "required": false
+                        },
+                        {
+                            "type": "text",
+                            "label": "API Url",
+                            "field": "api_url",
+                            "help": "API Url must be in the format of https://${host}/api/...&key=${apikey} where ${host} and ${apikey} will be substituted from the data inputs page. Add any additional params in format ${var} to be substituted by a custom script type",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "HTTPS only",
+                                    "pattern": "^https://"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Script Type",
+                            "field": "script_type",
+                            "required": true,
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "GET_api_generic_xml_output",
+                                        "label": "GET_api_generic_xml_output"
+                                    },
+                                    {
+                                        "value": "custom_GET_api_threat_traffic",
+                                        "label": "custom_GET_api_threat_traffic"
+                                    }
+                                ]
+                            },
+                            "defaultValue": "GET_api_generic",
+                            "help": "Generic API type will output basic HTTP Get response in the return to Splunk. A non-generic script type will have extra custom parsing before outputting to splunk"
+                        }
+                    ],
+                    "title": "API Endpoints"
+                },
+                {
+                    "type": "loggingTab"
+                }
+            ],
+            "title": "Configuration",
+            "description": "Set up your add-on"
+        },
+        "inputs": {
+            "services": [
+                {
+                    "name": "palo_alto_input",
+                    "entity": [
+                        {
+                            "type": "text",
+                            "label": "Name",
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Input Name must begin with a letter and consist exclusively of alphanumeric characters and underscores.",
+                                    "pattern": "^[a-zA-Z]\\w*$"
+                                }
+                            ],
+                            "field": "name",
+                            "help": "A unique name for the data input.",
+                            "required": true
+                        },
+                        {
+                            "type": "interval",
+                            "label": "Interval",
+                            "defaultValue": "300",
+                            "field": "interval",
+                            "options": {
+                                "range": [
+                                    10,
+                                    301
+                                ]
+                            },
+                            "help": "Time interval of the data input, in seconds.",
+                            "required": true
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Account to use",
+                            "options": {
+                                "referenceName": "account"
+                            },
+                            "help": "Account to use for this input.",
+                            "field": "account",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "string",
+                                    "errorMsg": "Length of account name should be between 1 and 100",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                }
+                            ]
+                        },
+                        {
+                            "type": "textarea",
+                            "label": "IP Addresses",
+                            "field": "ip_address",
+                            "help": "Comma-separated list of IPv4 addresses (e.g., 192.168.1.1, 10.0.0.1, 172.16.0.1)",
+                            "required": true,
+                            "validators": [
+                                {
+                                    "type": "regex",
+                                    "errorMsg": "Must be valid IPv4 addresses separated by commas (e.g., 192.168.1.1, 10.0.0.1)",
+                                    "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?:\\s*,\\s*(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))*$"
+                                },
+                                {
+                                    "type": "string",
+                                    "errorMsg": "IP addresses field should not exceed 1000 characters",
+                                    "minLength": 1,
+                                    "maxLength": 1000
+                                }
+                            ]
+                        },
+                        {
+                            "type": "multipleSelect",
+                            "label": "API Endpoints",
+                            "field": "api_endpoints",
+                            "help": "Configure API Endpoints from Configuration -> API Endpoints tab",
+                            "required": true,
+                            "options": {
+                                "referenceName": "api_endpoints"
+                            }
+                        },
+                        {
+                            "type": "singleSelect",
+                            "field": "index",
+                            "label": "Index",
+                            "required": true,
+                            "options": {
+                                "endpointUrl": "data/indexes",
+                                "createSearchChoice": true
+                            }
+                        },
+                        {
+                            "type": "radio",
+                            "label": "Index Type",
+                            "field": "index_type",
+                            "required": true,
+                            "defaultValue": "events",
+                            "help": "Select whether data should be sent as events or metrics",
+                            "options": {
+                                "items": [
+                                    {
+                                        "value": "events",
+                                        "label": "Events"
+                                    },
+                                    {
+                                        "value": "metrics",
+                                        "label": "Metrics"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "singleSelect",
+                            "label": "Sourcetype",
+                            "field": "sourcetype",
+                            "required": true,
+                            "defaultValue": "pan:log",
+                            "help": "Select the sourcetype for ingested events",
+                            "options": {
+                                "disableSearch": true,
+                                "autoCompleteFields": [
+                                    {
+                                        "value": "pan:log",
+                                        "label": "pan:log"
+                                    },
+                                    {
+                                        "value": "pan:traffic",
+                                        "label": "pan:traffic"
+                                    },
+                                    {
+                                        "value": "pan:threat",
+                                        "label": "pan:threat"
+                                    },
+                                    {
+                                        "value": "pan:system",
+                                        "label": "pan:system"
+                                    },
+                                    {
+                                        "value": "pan:config",
+                                        "label": "pan:config"
+                                    },
+                                    {
+                                        "value": "pan:session",
+                                        "label": "pan:session"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "inputHelperModule": "palo_alto_input_helper",
+                    "title": "palo_alto_input"
+                }
+            ],
+            "title": "Inputs",
+            "description": "Manage your data inputs",
+            "table": {
+                "actions": [
+                    "edit",
+                    "delete",
+                    "clone"
+                ],
+                "header": [
+                    {
+                        "label": "Name",
+                        "field": "name"
+                    },
+                    {
+                        "label": "Interval",
+                        "field": "interval"
+                    },
+                    {
+                        "label": "Index",
+                        "field": "index"
+                    },
+                    {
+                        "label": "Index Type",
+                        "field": "index_type"
+                    },
+                    {
+                        "label": "Sourcetype",
+                        "field": "sourcetype"
+                    },
+                    {
+                        "label": "API Endpoints",
+                        "field": "api_endpoints"
+                    },
+                    {
+                        "label": "IP Addresses",
+                        "field": "ip_address"
+                    },
+                    {
+                        "label": "Status",
+                        "field": "disabled"
+                    }
+                ],
+                "moreInfo": [
+                    {
+                        "label": "Name",
+                        "field": "name"
+                    },
+                    {
+                        "label": "Interval",
+                        "field": "interval"
+                    },
+                    {
+                        "label": "Index",
+                        "field": "index"
+                    },
+                    {
+                        "label": "Index Type",
+                        "field": "index_type"
+                    },
+                    {
+                        "label": "Sourcetype",
+                        "field": "sourcetype"
+                    },
+                    {
+                        "label": "Status",
+                        "field": "disabled",
+                        "mapping": {
+                            "true": "Inactive",
+                            "false": "Active"
+                        }
+                    }
+                ]
+            }
+        },
+        "dashboard": {
+            "panels": [
+                {
+                    "name": "default"
+                }
+            ]
+        }
+    },
+    "alerts": [
+        {
+            "name": "test_alert",
+            "label": "Test Alert",
+            "description": "Description for test Alert Action",
+            "iconFileName": "test icon.png",
+            "adaptiveResponse": {
+                "task": [
+                    "Create",
+                    "Update"
+                ],
+                "supportsAdhoc": true,
+                "supportsCloud": true,
+                "subject": [
+                    "endpoint"
+                ],
+                "category": [
+                    "Information Conveyance",
+                    "Information Portrayal"
+                ],
+                "technology": [
+                    {
+                        "version": [
+                            "1.0.0"
+                        ],
+                        "product": "Test Incident Update",
+                        "vendor": "Splunk"
+                    }
+                ],
+                "drilldownUri": "search?q=search%20index%3D\"_internal\"&earliest=0&latest=",
+                "sourcetype": "test:incident"
+            },
+            "entity": [
+                {
+                    "type": "text",
+                    "label": "Name",
+                    "field": "name",
+                    "defaultValue": "xyz",
+                    "required": true,
+                    "help": "Please enter your name"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "All Incidents",
+                    "field": "all_incidents",
+                    "defaultValue": 0,
+                    "required": false,
+                    "help": "Tick if you want to update all incidents/problems"
+                },
+                {
+                    "type": "singleSelect",
+                    "label": "Table List",
+                    "field": "table_list",
+                    "options": {
+                        "items": [
+                            {
+                                "value": "incident",
+                                "label": "Incident"
+                            },
+                            {
+                                "value": "problem",
+                                "label": "Problem"
+                            }
+                        ]
+                    },
+                    "help": "Please select the table",
+                    "required": false,
+                    "defaultValue": "problem"
+                },
+                {
+                    "type": "radio",
+                    "label": "Action:",
+                    "field": "action",
+                    "options": {
+                        "items": [
+                            {
+                                "value": "update",
+                                "label": "Update"
+                            },
+                            {
+                                "value": "delete",
+                                "label": "Delete"
+                            }
+                        ]
+                    },
+                    "help": "Select the action you want to perform",
+                    "required": true,
+                    "defaultValue": "update"
+                },
+                {
+                    "type": "singleSelectSplunkSearch",
+                    "label": "Select Account",
+                    "field": "account",
+                    "search": "| rest /servicesNS/nobody/Splunk_TA_UCCExample/splunk_ta_uccexample_account | dedup title",
+                    "options": {
+                        "items": [
+                            {
+                                "label": "earliest",
+                                "value": "-4@h"
+                            },
+                            {
+                                "label": "latest",
+                                "value": "now"
+                            }
+                        ]
+                    },
+                    "valueField": "title",
+                    "labelField": "title",
+                    "help": "Select the account from the dropdown",
+                    "required": true
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "name": "palo_alto_addon_for_splunk",
+        "restRoot": "palo_alto_addon_for_splunk",
+        "version": "1.0.16",
+        "displayName": "Palo Alto Add-on for Splunk",
+        "schemaVersion": "0.0.10",
+        "supportedThemes": [
+            "light",
+            "dark"
+        ]
+    }
+}
