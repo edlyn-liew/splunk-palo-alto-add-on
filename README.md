@@ -142,39 +142,7 @@ When configuring API endpoints, you must select a script type that determines ho
    ```spl
    index=_internal source=*palo_alto_addon_for_splunk*
    ```
-
-## Configuration Examples
-
-### Example 1: Single Firewall, System Metrics
-- **Name**: `fw01_system_metrics`
-- **Interval**: `300`
-- **IP Address**: `10.1.1.1`
-- **Account**: `prod_firewall`
-- **API Endpoints**: `system_info`, `session_info`
-- **Sourcetype**: `pan:system`
-- **Index Type**: `Metrics`
-- **Index**: `metrics`
-
-### Example 2: Multiple Firewalls, Threat Logs
-- **Name**: `firewall_cluster_threats`
-- **Interval**: `600`
-- **IP Address**: `10.1.1.1, 10.1.1.2, 10.1.1.3`
-- **Account**: `prod_firewall`
-- **API Endpoints**: `threat_logs`
-- **Sourcetype**: `pan:threat`
-- **Index Type**: `Events`
-- **Index**: `main`
-
-### Example 3: Panorama, Configuration Auditing
-- **Name**: `panorama_config_audit`
-- **Interval**: `3600`
-- **IP Address**: `10.1.2.1`
-- **Account**: `panorama_account`
-- **API Endpoints**: `config_audit`
-- **Sourcetype**: `pan:config`
-- **Index Type**: `Events`
-- **Index**: `main`
-
+   
 ## Multiple IP Addresses
 
 You can monitor up to 20 Palo Alto devices with a single input:
