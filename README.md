@@ -62,6 +62,8 @@ This creates a `.tar.gz` file that can be installed in Splunk.
 
 ### Step 2: Configure API Endpoints (Optional)
 
+![api endpoint config example](api_endpoint_config_example.png "API Endpoint Config Example")
+
 The add-on comes with pre-configured API endpoints. You can add custom endpoints if needed:
 
 1. Go to the **Configuration** tab > **API Endpoints** section
