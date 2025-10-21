@@ -92,40 +92,7 @@ When configuring API endpoints, you must select a script type that determines ho
 
 1. Go to the **Inputs** tab
 2. Click **Create New Input**
-3. Fill in the following fields:
 
-   - **Name**: Unique input name (e.g., `prod_firewall_system_metrics`)
-   - **Interval**: Data collection interval in seconds (e.g., `300` for 5 minutes)
-   - **Index**: Splunk index for the data (e.g., `main` or `metrics`)
-   - **IP Address**: Device IP address(es)
-     - Single IP: `192.168.1.1`
-     - Multiple IPs (comma-separated, max 20): `192.168.1.1, 192.168.1.2, 192.168.1.3`
-     - All IPs will use the same configuration and be queried in parallel
-
-   - **Account**: Select the account you created in Step 1
-
-   - **API Endpoints**: Select one or more API endpoints to query
-     - Available endpoints: `system_info`, `session_info`, `threat_logs`, etc.
-     - Multiple endpoints will be queried sequentially for each IP address
-
-   - **Sourcetype**: Select the appropriate sourcetype
-     - `pan:log` (default) - General logs
-     - `pan:traffic` - Traffic logs
-     - `pan:threat` - Threat logs
-     - `pan:system` - System logs
-     - `pan:config` - Configuration logs
-     - `pan:session` - Session logs
-
-   - **Index Type**: Choose data format
-     - **Events** (default): Raw XML data parsed by Splunk
-       - Use for detailed logs and records
-       - Searchable with standard SPL commands
-     - **Metrics**: Numeric values in JSON format
-       - Use for time-series data (CPU, memory, session counts, etc.)
-       - Searchable with `| mstats`, `| mcatalog`
-       - Best practice: Use a metrics index
-
-4. Click **Add**
 
 ### Step 4: Verify Data Collection
 
