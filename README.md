@@ -11,6 +11,10 @@ This is a Splunk Technology Add-on (TA) that collects data from Palo Alto Networ
 
 ## Installation
 
+### Setup Python Virtual Environment
+python3 -m venv .venv
+source .venv/bin/activate
+
 ### Install UCC Generator
 
 ```bash
@@ -142,7 +146,7 @@ When configuring API endpoints, you must select a script type that determines ho
    ```spl
    index=_internal source=*palo_alto_addon_for_splunk*
    ```
-   
+
 ## Multiple IP Addresses
 
 You can monitor up to 20 Palo Alto devices with a single input:
